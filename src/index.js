@@ -22,13 +22,14 @@ const renderRestaurants = (restaurants, hash) => {
     const html = restaurants.map( r =>`
         <li>
             ${ r.name }
-                <button>Make Reservation</button>
+                <button data-id='${r.id}'>Make Reservation</button>
         </li>
     `).join('');
     restaurantList.innerHTML = html
 };
 
 const renderReservations = (reservations) => {
+    console.log(reservations)
     const html = reservations.map( r =>`
       <li>
         Reservation at ${r.restaurant.name}
@@ -62,8 +63,8 @@ restaurantList.addEventListener('click', async (ev)=> {
     const userId = window.location.hash.slice(1);
     if(target.tagName === 'BUTTON' && userId){
         const _restaurant = {restaurantId: target.getAttribute('data-id')}
-        const response = await axios.post(`/api/users/${userId}/reservations`, _restaurant)
-        renderReservations()
+        const response = (await axios.post(`/api/users/${userId}/reservations`, _restaurant)).data
+        render()
     }
 })
 
